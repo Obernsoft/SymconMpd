@@ -7,7 +7,7 @@
 
 			$this->RegisterPropertyString("Password", "");
 
-			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDPlayer_KeepAlive()');
+			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive()');
 		}
 
 		public function ApplyChanges()
