@@ -1,0 +1,11 @@
+{
+	"id": "{6E208155-7BB3-4871-BADE-FDC8F84331F8}",
+	"name": "MPDPlayer",
+	"type": 3,
+	"vendor": "Obernsoft",
+	"aliases": ["MPDPlayer"],
+	"parentRequirements": ["{B87AC955-F258-468B-92FE-F4E0866A9E18}"],
+	"childRequirements": [],
+	"implemented": ["{C0018D6D-728C-43C4-9F72-1FCD289B2C69}"],
+	"prefix": "MPDPlayer"
+}

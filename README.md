@@ -1,2 +1,6 @@
 # SymconMpd
-MPDPlayer for IP-Symcon
+
+Folgende Module beinhaltet das Repository:
+
+- __MPDPlayer__   
+	Steuert MPD (Music Player Daemon).

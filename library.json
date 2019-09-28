@@ -1,0 +1,12 @@
+{
+	"id": "{F9C0DDFF-2B68-4A97-B376-B9438E737CF4}",
+	"author": "Obernsoft",
+	"name": "Modul für den Music Player Daemon (Mpd) für IP Symcon",
+	"url": "www.obernsoft.de",
+	"compatibility": {
+		"version": "5.0"
+	},
+	"version": "0.1",
+	"build": 0,
+	"date": 0
+}
