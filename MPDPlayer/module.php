@@ -7,7 +7,7 @@
 
 			$this->RegisterPropertyString("Password", "");
 
-			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive()');
+			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive($_IPS[\'TARGET\'])');
 		}
 
 		public function ApplyChanges()
@@ -50,9 +50,7 @@
 
 		public function KeepAlive()
 		{
-			//$this->Send("ping");
-echo "Ping";
-
+			$this->Send("ping");
 		}
 
 
