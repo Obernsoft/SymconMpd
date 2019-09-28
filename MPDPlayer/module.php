@@ -45,13 +45,13 @@
 			$data = json_decode($JSONString);
 			IPS_LogMessage("MPDPlayer", utf8_decode($data->Buffer));
 			//Parse and write values to our variables
-			echo $data;
+			//echo $data;
 		}
 
 		public function KeepAlive()
 		{
-			$this->Send("ping");
-
+			//$this->Send("ping");
+echo "Ping";
 
 		}
 
