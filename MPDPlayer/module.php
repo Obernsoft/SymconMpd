@@ -1,7 +1,7 @@
 <?
 	class MPDPlayer extends IPSModule
 	{
-		public create {
+		public function create {
             // Diese Zeile nicht löschen.
             parent::Create();
 
