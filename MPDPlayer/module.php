@@ -5,8 +5,6 @@
             // Diese Zeile nicht löschen.
             parent::Create();
 
-			$this->RegisterPropertyString("IPAddress", "");
-			$this->RegisterPropertyString("Host", "");
 			$this->RegisterPropertyString("Password", "");
 
 			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDPlayer_KeepAlive()');
@@ -37,7 +35,7 @@
 			$this->ForceParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
 		}
 
-		public function Send($Text)
+		public function Send(string $Text)
 		{
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $Text)));
 		}
