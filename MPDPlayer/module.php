@@ -1,8 +1,8 @@
 <?
 	class MPDPlayer extends IPSModule
 	{
-		public function create() {
-            // Diese Zeile nicht löschen.
+		public function Create() {
+			//Never delete this line!
             parent::Create();
 
 			$this->RegisterPropertyString("Password", "");
@@ -88,9 +88,5 @@
 
 		}
 
-
-
-
-
-	}
+}
 ?>
