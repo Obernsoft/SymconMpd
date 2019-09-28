@@ -4,8 +4,8 @@
 	"type": 3,
 	"vendor": "Obernsoft",
 	"aliases": ["MPDPlayer"],
-	"parentRequirements": ["{B87AC955-F258-468B-92FE-F4E0866A9E18}"],
+	"parentRequirements": ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"],
 	"childRequirements": [],
-	"implemented": ["{C0018D6D-728C-43C4-9F72-1FCD289B2C69}"],
+	"implemented": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"],
 	"prefix": "MPDPlayer"
 }
