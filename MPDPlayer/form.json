@@ -1,7 +1,51 @@
 {
     "elements":
     [
-        { "type": "ValidationTextBox", "name": "Password", "caption": "Password" }
+        { "type": "PasswordTextBox", "name": "Password", "caption": "Password" }
+
+	{
+	    "type": "List",
+	    "name": "Radiostations",
+	    "caption": "Radio Stationen",
+	    "rowCount": 5,
+	    "add": true,
+	    "delete": true,
+	    "sort": {
+	        "column": "Name",
+	        "direction": "ascending"
+	    },
+	    "columns": [{
+	        "caption": "Position",
+	        "name": "position", 
+	        "width": "auto",
+	        "add": 0,
+		"visible": false
+	    }, {
+	        "caption": "Name",
+	        "name": "station",
+	        "width": "auto",
+	        "add": ""
+	        "edit": {
+	            "type": "ValidationTextBox"
+	        }
+
+	    }, {
+	        "caption": "Station URL",
+	        "name": "station_url",
+	        "width": "auto",
+	        "add": "http://",
+	        "edit": {
+	            "type": "ValidationTextBox"
+	        }
+	    }],
+	    "values": [{
+	        "InstanceID": 12435,
+	        "Name": "ABCD",
+	        "State": "OK!",
+	        "Temperature": 23.31,
+	        "rowColor": "#ff0000" //rot
+	    }]
+	}
 
     ]
 }
