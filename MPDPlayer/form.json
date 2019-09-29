@@ -11,22 +11,23 @@
 	    "add": true,
 	    "delete": true,
 	    "sort": {
-	        "column": "Name",
+	        "column": "position",
 	        "direction": "ascending"
 	    },
 	    "columns": [{
 	        "caption": "Position",
 	        "name": "position", 
-	        "width": "auto",
+	        "width": "20px",
 	        "add": 0,
-		"visible": false
+	        "edit": { "type": "NumberSpinner", "name": "position", "caption": "Position" }
 	    }, {
 	        "caption": "Name",
 	        "name": "station",
-	        "width": "auto",
-	        "add": ""
+	        "width": "120px",
+	        "add": "",
 	        "edit": {
-	            "type": "ValidationTextBox"
+	            "type": "ValidationTextBox",
+	            "caption": "Sendername"
 	        }
 
 	    }, {
@@ -35,15 +36,9 @@
 	        "width": "auto",
 	        "add": "http://",
 	        "edit": {
-	            "type": "ValidationTextBox"
+	            "type": "ValidationTextBox",
+	            "caption": "Station URL:"
 	        }
-	    }],
-	    "values": [{
-	        "InstanceID": 12435,
-	        "Name": "ABCD",
-	        "State": "OK!",
-	        "Temperature": 23.31,
-	        "rowColor": "#ff0000" //rot
 	    }]
 	}
 
