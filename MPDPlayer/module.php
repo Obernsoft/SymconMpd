@@ -99,7 +99,6 @@
 					SetValue($this->GetIDForIdent($Ident), $Value);
 					break;
 
-
 				default:
 					throw new Exception("Invalid Ident");
 			}
@@ -131,6 +130,31 @@
 			$this->Send("next\n");
 		}
 
+		public function SetNewStation(int $newStation) {
+
+			$StationURL = $this->GetStationURL($newStation);
+
+			$this->Send("clear\n");
+			$this->Send("add ".$StationURL." \n");
+
+			if($this->GetValue("Status")==3) {
+				$this->Send("play\n");
+			}
+		}
+
+		private function GetStationURL(int $preset): string
+		{
+			$list_json = $this->ReadPropertyString('RadioStations');
+			$list      = json_decode($list_json, true);
+			$stationid = '';
+			foreach ($list as $station) {
+				if ($preset === $station['position']) {
+					$stationurl    = $station['station_url'];
+				}
+			}
+			return $stationurl;
+		}
+
 
 
 		public function Send(string $Text)
@@ -145,32 +169,6 @@
 			//Parse and write values to our variables
 			//echo $data;
 		}
-
-		public function SetNewStation(int $newStation) {
-
-			$StationURL = $this->GetStationURL($newStation);
-
-			$this->Send("clear\n");
-			$this->Send("add ".$StationURL." \n");
-			$this->Send("play\n");
-		}
-
-		private function GetStationURL(int $preset): string
-		{
-			$list_json = $this->ReadPropertyString('RadioStations');
-			$list      = json_decode($list_json, true);
-			$stationid = '';
-			foreach ($list as $station) {
-				if ($preset === $station['position']) {
-					$station_name = $station['station'];
-					$stationid    = $station['station_id'];
-					$stationurl    = $station['station_url'];
-				}
-			}
-			return $stationurl;
-		}
-
-
 
 		public function KeepAlive()
 		{
