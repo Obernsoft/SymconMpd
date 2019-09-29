@@ -33,12 +33,28 @@
 																					Array(3, " Play ",   "", -1),
 																					Array(4, " >> ",    "", -1) ));
 
-			$this->RegisterVariableInteger("Status","Status","Mpd.Status",3);
+			$this->RegisterVariableInteger("Status","Status","Mpd.Status",5);
 			SetValue($this->GetIDForIdent("Status"), 1);
 			$this->EnableAction("Status");
 
 			//Connect to available splitter or create a new one
 			$this->ForceParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
+
+
+
+
+			$associations = [];
+			foreach (json_decode($this->ReadPropertyString('RadioStations'), true) as $RadioStation) {
+				$associations[] = [$RadioStation['position'], $RadioStation['station'], '', -1];
+			}
+			$profileName = 'MPD.Station';
+
+			$this->RegisterProfileIntegerEx($profileName, "Database", "", "", $associations);
+
+			//$this->RegisterProfileAssociation($profileName, 'Music', '', '', 0, 0, 0, 0, VARIABLETYPE_INTEGER, $associations);
+
+			$this->RegisterVariableInteger("Senderliste", 'Senderliste', $profileName, 3);
+			$this->EnableAction("Senderliste");
 		}
 
 		public function RequestAction($Ident, $Value) {
