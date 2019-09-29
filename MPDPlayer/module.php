@@ -79,14 +79,14 @@
 		}
 
 
-		public function Play(int $status)
+		public function Play()
 		{
-			$this->Send("play ".$status."\n");
+			$this->Send("play\n");
 		}
 
-		public function Pause()
+		public function Pause(int $status)
 		{
-			$this->Send("pause\n");
+			$this->Send("pause ".$status."\n");
 		}
 
 		public function Stop()
