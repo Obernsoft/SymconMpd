@@ -7,7 +7,7 @@
 
 			$this->RegisterPropertyString("Password", "");
 
-			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive($_IPS[\'TARGET\'])');
+			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive($_IPS[\'TARGET\']);');
 		}
 
 		public function ApplyChanges()
@@ -35,6 +35,76 @@
 			$this->ForceParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
 		}
 
+		public function RequestAction($Ident, $Value) {
+
+			switch($Ident) {
+				case "Power":
+					SetValue($this->GetIDForIdent($Ident), $Value);
+					break;
+
+				case "Status":
+					switch($Value) {
+						case 0: //Prev
+								$this->Previous();
+								SetValue($this->GetIDForIdent($Ident), $Value);
+								break;
+						case 1: //Stop
+								$this->Stop();
+								SetValue($this->GetIDForIdent($Ident), $Value);
+								break;
+						case 2: //Pause
+								$this->Pause(1);
+								SetValue($this->GetIDForIdent($Ident), $Value);
+								break;
+						case 3: //Play
+								if(GetValue($this->GetIDForIdent($Ident))!=2) {
+										$this->Play();
+								}
+								else {
+										$this->Pause(0);
+								}
+								SetValue($this->GetIDForIdent($Ident), $Value);
+								break;
+						case 4: //Next
+								$this->Next();
+								SetValue($this->GetIDForIdent($Ident), $Value);
+								break;
+				}
+				break;
+
+				default:
+					throw new Exception("Invalid Ident");
+			}
+
+		}
+
+
+		public function Play(int $status)
+		{
+			$this->Send("play ".$status."\n");
+		}
+
+		public function Pause()
+		{
+			$this->Send("pause\n");
+		}
+
+		public function Stop()
+		{
+			$this->Send("stop\n");
+		}
+
+		public function Previous()
+		{
+			$this->Send("previous\n");		}
+
+		public function Next()
+		{
+			$this->Send("next\n");
+		}
+
+
+
 		public function Send(string $Text)
 		{
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $Text)));
@@ -48,9 +118,15 @@
 			//echo $data;
 		}
 
+		public function SetNewStation() {
+			$this->Send("clear\n");
+			$this->Send("add http://172.27.2.205:9981/stream/channel/14f799071150331b9a7994ca8c61f8c7 \n");
+			$this->Send("play\n");
+		}
+
 		public function KeepAlive()
 		{
-			$this->Send("ping");
+			$this->Send("ping\n");
 		}
 
 
