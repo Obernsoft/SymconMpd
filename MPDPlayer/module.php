@@ -53,7 +53,7 @@
 
 			//$this->RegisterProfileAssociation($profileName, 'Music', '', '', 0, 0, 0, 0, VARIABLETYPE_INTEGER, $associations);
 
-			$this->RegisterVariableInteger("Senderliste", 'Senderliste', $profileName, 3);
+			$this->RegisterVariableInteger("Senderliste", "Sender", $profileName, 3);
 			$this->EnableAction("Senderliste");
 		}
 
@@ -91,8 +91,14 @@
 								$this->Next();
 								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
-				}
-				break;
+					}
+					break;
+
+				case "Senderliste":
+					$this->SetNewStation($Value);
+					SetValue($this->GetIDForIdent($Ident), $Value);
+					break;
+
 
 				default:
 					throw new Exception("Invalid Ident");
@@ -140,11 +146,31 @@
 			//echo $data;
 		}
 
-		public function SetNewStation() {
+		public function SetNewStation(int $newStation) {
+
+			$StationURL = $this->GetStationURL($newStation);
+
 			$this->Send("clear\n");
-			$this->Send("add http://172.27.2.205:9981/stream/channel/14f799071150331b9a7994ca8c61f8c7 \n");
+			$this->Send("add ".$StationURL." \n");
 			$this->Send("play\n");
 		}
+
+		private function GetStationURL(int $preset): string
+		{
+			$list_json = $this->ReadPropertyString('RadioStations');
+			$list      = json_decode($list_json, true);
+			$stationid = '';
+			foreach ($list as $station) {
+				if ($preset === $station['position']) {
+					$station_name = $station['station'];
+					$stationid    = $station['station_id'];
+					$stationurl    = $station['station_url'];
+				}
+			}
+			return $stationurl;
+		}
+
+
 
 		public function KeepAlive()
 		{
