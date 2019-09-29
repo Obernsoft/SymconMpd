@@ -7,6 +7,12 @@
 
 			$this->RegisterPropertyString("Password", "");
 
+			$this->RegisterPropertyString(
+				'RadioStations', '[{"position":1,"station":"NDR2 Niedersachsen","station_url":"http://172.27.2.205:9981/stream/channel/800c150e9a6b16078a4a3b3b5aee0672"},
+				{"position":2,"station":"MDR Jump","station_url":"http://172.27.2.205:9981/stream/channel/0888328132708be0905731457bba8ae0"},
+				{"position":3,"station":"Inselradio Mallorca","station_url":"http://172.27.2.205:9981/stream/channel/14f799071150331b9a7994ca8c61f8c7"}]'
+            );
+
 			$this->RegisterTimer("KeepAliveTimer", 30000, 'MPDP_KeepAlive($_IPS[\'TARGET\']);');
 		}
 
