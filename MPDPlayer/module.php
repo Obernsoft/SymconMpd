@@ -223,7 +223,7 @@
 					break;
 
 				default:
-					break
+					break;
 			}
 		}
 
