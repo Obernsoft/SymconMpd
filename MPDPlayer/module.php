@@ -28,9 +28,9 @@
 			SetValue($this->GetIDForIdent("Volume"), 50);
 			$this->EnableAction("Volume");
 
-			$this->RegisterVariableString("Titel", "Titel","",2);
+			$this->RegisterVariableString("Titel", "Titel","",3);
 
-			$this->RegisterVariableInteger("Dauer","Dauer","~UnixTimestampTime",3);
+			$this->RegisterVariableInteger("Dauer","Dauer","~UnixTimestampTime",4);
 
 			$this->RegisterProfileIntegerEx("Mpd.Status", "Information", "", "", Array( Array(0, " << ", "", -1),
 																					Array(1, " Stop ",   "", -1),
@@ -38,7 +38,7 @@
 																					Array(3, " Play ",   "", -1),
 																					Array(4, " >> ",    "", -1) ));
 
-			$this->RegisterVariableInteger("Status","Status","Mpd.Status",4);
+			$this->RegisterVariableInteger("Status","Status","Mpd.Status",5);
 			SetValue($this->GetIDForIdent("Status"), 1);
 			$this->EnableAction("Status");
 
@@ -58,15 +58,14 @@
 		}
 
 		public function RequestAction($Ident, $Value) {
+			SetValue($this->GetIDForIdent($Ident), $Value);
 
 			switch($Ident) {
 				case "Power":
-					SetValue($this->GetIDForIdent($Ident), $Value);
 					break;
 
 				case "Volume":
 					$this->SetVolume($Value);
-					SetValue($this->GetIDForIdent($Ident), $Value);
 					break;
 
 
@@ -74,15 +73,12 @@
 					switch($Value) {
 						case 0: //Prev
 								$this->Previous();
-								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
 						case 1: //Stop
 								$this->Stop();
-								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
 						case 2: //Pause
 								$this->Pause(1);
-								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
 						case 3: //Play
 								if(GetValue($this->GetIDForIdent($Ident))!=2) {
@@ -91,18 +87,15 @@
 								else {
 										$this->Pause(0);
 								}
-								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
 						case 4: //Next
 								$this->Next();
-								SetValue($this->GetIDForIdent($Ident), $Value);
 								break;
 					}
 					break;
 
 				case "Senderliste":
 					$this->SetNewStation($Value);
-					SetValue($this->GetIDForIdent($Ident), $Value);
 					break;
 
 				default:
@@ -186,11 +179,12 @@
 			$this->SetBuffer("DataBuffer", $bufferData);
 		}
 
-
 		private function AnalyseData($data) {
+			IPS_LogMessage("MPDPlayer", $data));
 
 			switch ($data) {
 				case "volume":
+
 					break;
 
 				case "state":
@@ -207,9 +201,9 @@
 			}
 		}
 
-		private function KeepAlive()
+		pubic function KeepAlive()
 		{
-			$this->Send("ping\n");
+			$this->Send("status\n");
 		}
 
 
