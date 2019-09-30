@@ -180,7 +180,7 @@
 		}
 
 		private function AnalyseData($data) {
-			IPS_LogMessage("MPDPlayer", $data));
+			IPS_LogMessage("MPDPlayer", $data);
 
 			switch ($data) {
 				case "volume":
@@ -201,7 +201,7 @@
 			}
 		}
 
-		pubic function KeepAlive()
+		public function KeepAlive()
 		{
 			$this->Send("status\n");
 		}
