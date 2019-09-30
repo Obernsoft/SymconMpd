@@ -30,9 +30,9 @@
 			SetValue($this->GetIDForIdent("Volume"), 50);
 			$this->EnableAction("Volume");
 
-			$this->RegisterVariableString("Titel", "Titel","",3);
+			$this->RegisterVariableString("Titel", "Titel","Melody",3);
 
-			$this->RegisterVariableString("Dauer","Dauer","",4);
+			$this->RegisterVariableString("Dauer","Dauer","Clock",4);
 
 			$this->RegisterProfileIntegerEx("Mpd.Status", "Information", "", "", Array( Array(0, " << ", "", -1),
 																					Array(1, " Stop ",   "", -1),
@@ -156,9 +156,14 @@
 			$stationid = '';
 			foreach ($list as $station) {
 				if ($preset === $station['position']) {
-					$stationurl    = $station['station_url'];
+					$stationurl  = $station['station_url'];
+					$stationname = $station['station'];
 				}
 			}
+
+			// Stationname in Info
+			SetValue($this->GetIDForIdent("Titel"), $stationname);
+
 			return $stationurl;
 		}
 
@@ -196,7 +201,7 @@
 					break;
 
 				case "state":
-					$this->GetState(intval($dataParts[1]));
+					$this->GetState($dataParts[1]);
 					break;
 
 				case "elapsed":
@@ -216,7 +221,7 @@
 		}
 
 		public function GetState(string $state) {
-			switch ($state) {
+			switch (trim($state)) {
 				case "play":
 					SetValue($this->GetIDForIdent("Status"), 3);
 					break;
@@ -246,7 +251,9 @@
 
 		public function KeepAlive()
 		{
-			$this->Send("status\n");
+			if($this->HasActiveParent()) {
+				$this->Send("status\n");
+			}
 		}
 
 	   //Remove on next Symcon update
