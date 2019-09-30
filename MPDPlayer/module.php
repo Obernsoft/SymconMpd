@@ -175,14 +175,13 @@
 				}
 			}
 			$bufferData = $bufferParts[sizeof($bufferParts)-1];
-			//Übriggebliebene Daten auf den Buffer schreiben
+			//Uebriggebliebene Daten auf den Buffer schreiben
 			$this->SetBuffer("DataBuffer", $bufferData);
 		}
 
 		private function AnalyseData($data) {
-			//IPS_LogMessage("MPDPlayer", $data);
-
 			$dataParts = explode(":", $data);
+			//IPS_LogMessage("MPDPlayer", $dataParts[1]);
 
 			switch ($dataParts[0]) {
 				case "volume":
@@ -190,7 +189,7 @@
 					break;
 
 				case "state":
-					$this->GetState($dataParts[1]);
+					$this->GetState(intval($dataParts[1]));
 					break;
 
 				case "elapsed":
@@ -209,8 +208,23 @@
 			SetValue($this->GetIDForIdent("Volume"), $volume);
 		}
 
-		public function GetState(int $state) {
-			SetValue($this->GetIDForIdent("Status"), $state);
+		public function GetState(string $state) {
+			switch ($state) {
+				case "play":
+					SetValue($this->GetIDForIdent("Status"), 3);
+					break;
+
+				case "stop":
+					SetValue($this->GetIDForIdent("Status"), 1);
+					break;
+
+				case "pause":
+					SetValue($this->GetIDForIdent("Status"), 2);
+					break;
+
+				default:
+					break
+			}
 		}
 
 		public function GetTimeElapsed(int $elapsed) {
@@ -220,7 +234,7 @@
 
 			$niced_elapsed = sprintf("%02d:%02d:%02d", $stunden, $minuten, $sekunden);
 
-			SetValue($this->GetIDForIdent("Dauer"), $elapsed);
+			SetValue($this->GetIDForIdent("Dauer"), niced_$elapsed);
 		}
 
 		public function KeepAlive()
