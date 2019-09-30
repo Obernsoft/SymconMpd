@@ -30,9 +30,11 @@
 			SetValue($this->GetIDForIdent("Volume"), 50);
 			$this->EnableAction("Volume");
 
-			$this->RegisterVariableString("Titel", "Titel","Melody",3);
+			$this->RegisterVariableString("Titel", "Titel","",3);
+			IPS_SetIcon($this->GetIDForIdent("Titel"), "Melody");
 
-			$this->RegisterVariableString("Dauer","Dauer","Clock",4);
+			$this->RegisterVariableString("Dauer","Dauer","",4);
+			IPS_SetIcon($this->GetIDForIdent("Dauer"), "Clock");
 
 			$this->RegisterProfileIntegerEx("Mpd.Status", "Information", "", "", Array( Array(0, " << ", "", -1),
 																					Array(1, " Stop ",   "", -1),
