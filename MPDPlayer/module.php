@@ -30,7 +30,7 @@
 
 			$this->RegisterVariableString("Titel", "Titel","",3);
 
-			$this->RegisterVariableInteger("Dauer","Dauer","~UnixTimestampTime",4);
+			$this->RegisterVariableString("Dauer","Dauer","",4);
 
 			$this->RegisterProfileIntegerEx("Mpd.Status", "Information", "", "", Array( Array(0, " << ", "", -1),
 																					Array(1, " Stop ",   "", -1),
@@ -38,7 +38,7 @@
 																					Array(3, " Play ",   "", -1),
 																					Array(4, " >> ",    "", -1) ));
 
-			$this->RegisterVariableInteger("Status","Status","Mpd.Status",5);
+			$this->RegisterVariableInteger("Status","Status","Mpd.Status",6);
 			SetValue($this->GetIDForIdent("Status"), 1);
 			$this->EnableAction("Status");
 
@@ -52,7 +52,7 @@
 			}
 			$this->RegisterProfileIntegerEx($profileName, "Database", "", "", $associations);
 			//$this->RegisterProfileAssociation($profileName, 'Music', '', '', 0, 0, 0, 0, VARIABLETYPE_INTEGER, $associations);
-			$this->RegisterVariableInteger("Senderliste", "Sender", $profileName, 3);
+			$this->RegisterVariableInteger("Senderliste", "Sender", $profileName, 5);
 			$this->EnableAction("Senderliste");
 
 		}
@@ -132,9 +132,9 @@
 			$this->Send("clear\n");
 			$this->Send("add ".$StationURL." \n");
 
-			if($this->GetValue("Status")==3) {
+//			if($this->GetValue("Status")==3) {
 				$this->Send("play\n");
-			}
+//			}
 		}
 
 		public function SetVolume(int $newVolume) {
@@ -180,17 +180,21 @@
 		}
 
 		private function AnalyseData($data) {
-			IPS_LogMessage("MPDPlayer", $data);
+			//IPS_LogMessage("MPDPlayer", $data);
 
-			switch ($data) {
+			$dataParts = explode(":", $data);
+
+			switch ($dataParts[0]) {
 				case "volume":
-
+					$this->GetVolume($dataParts[1]);
 					break;
 
 				case "state":
+					$this->GetState($dataParts[1]);
 					break;
 
 				case "elapsed":
+					$this->GetTimeElapsed($dataParts[1]);
 					break;
 
 				case "songid":
@@ -201,11 +205,28 @@
 			}
 		}
 
+		public function GetVolume(int $volume) {
+			SetValue($this->GetIDForIdent("Volume"), $volume);
+		}
+
+		public function GetState(int $state) {
+			SetValue($this->GetIDForIdent("Status"), $state);
+		}
+
+		public function GetTimeElapsed(int $elapsed) {
+			$stunden = floor($elapsed / 3600);
+			$minuten = floor(($elapsed - ($stunden * 3600)) / 60);
+			$sekunden = round($elapsed - ($stunden * 3600) - ($minuten * 60), 0);
+
+			$niced_elapsed = sprintf("%02d:%02d:%02d", $stunden, $minuten, $sekunden);
+
+			SetValue($this->GetIDForIdent("Dauer"), $elapsed);
+		}
+
 		public function KeepAlive()
 		{
 			$this->Send("status\n");
 		}
-
 
 	   //Remove on next Symcon update
 		protected function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize) {
