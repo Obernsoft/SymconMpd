@@ -40,7 +40,10 @@
 	            "caption": "Station URL:"
 	        }
 	    }]
-	}
+	},
+	
+	{ "type": "CheckBox", "name": "HideVolume", "caption": "Verstecke Lautstärke" }
+
 
     ]
 }

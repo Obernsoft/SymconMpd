@@ -13,7 +13,9 @@
 				{"position":3,"station":"Inselradio Mallorca","station_url":"http://172.27.2.205:9981/stream/channel/14f799071150331b9a7994ca8c61f8c7"}]'
             );
 
-			$this->RegisterTimer("KeepAliveTimer", 5000, 'MPDP_KeepAlive($_IPS[\'TARGET\']);');
+            $this->RegisterPropertyBoolean("HideVolume",false);
+
+			$this->RegisterTimer("KeepAliveTimer", 1000, 'MPDP_KeepAlive($_IPS[\'TARGET\']);');
 		}
 
 		public function ApplyChanges()
@@ -55,6 +57,11 @@
 			$this->RegisterVariableInteger("Senderliste", "Sender", $profileName, 5);
 			$this->EnableAction("Senderliste");
 
+			if($this->ReadPropertyBoolean('HideVolume')) {
+				IPS_SetHidden($this->GetIDForIdent("Volume"), TRUE);
+			} else {
+				IPS_SetHidden($this->GetIDForIdent("Volume"), FALSE);
+			}
 		}
 
 		public function RequestAction($Ident, $Value) {
@@ -234,7 +241,7 @@
 
 			$niced_elapsed = sprintf("%02d:%02d:%02d", $stunden, $minuten, $sekunden);
 
-			SetValue($this->GetIDForIdent("Dauer"), niced_$elapsed);
+			SetValue($this->GetIDForIdent("Dauer"), $niced_elapsed);
 		}
 
 		public function KeepAlive()
