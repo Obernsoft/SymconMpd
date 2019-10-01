@@ -138,16 +138,16 @@
 			if($Value) {
 				IPS_SetProperty($ClientSocketID,"Open",TRUE);
 
-				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), true);
-				IPS_SetDisabled($this->GetIDForIdent("Status"), true);
+				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), false);
+				IPS_SetDisabled($this->GetIDForIdent("Status"), false);
 
 			} else {
 				$this->Stop();
 				usleep(250000);
 				IPS_SetProperty($ClientSocketID,"Open",FALSE);
 
-				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), false);
-				IPS_SetDisabled($this->GetIDForIdent("Status"), false);
+				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), true);
+				IPS_SetDisabled($this->GetIDForIdent("Status"), true);
 
 			}
 			IPS_ApplyChanges($ClientSocketID);
