@@ -138,6 +138,9 @@
 			if($Value) {
 				IPS_SetProperty($ClientSocketID,"Open",TRUE);
 
+				IPS_SetDisabled($this->GetIDForIdent("Volume"), false);
+				IPS_SetDisabled($this->GetIDForIdent("Titel"), false);
+				IPS_SetDisabled($this->GetIDForIdent("TimeElapsed"), false);
 				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), false);
 				IPS_SetDisabled($this->GetIDForIdent("Status"), false);
 
@@ -146,6 +149,9 @@
 				usleep(250000);
 				IPS_SetProperty($ClientSocketID,"Open",FALSE);
 
+				IPS_SetDisabled($this->GetIDForIdent("Volume"), true);
+				IPS_SetDisabled($this->GetIDForIdent("Titel"), true);
+				IPS_SetDisabled($this->GetIDForIdent("TimeElapsed"), true);
 				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), true);
 				IPS_SetDisabled($this->GetIDForIdent("Status"), true);
 
@@ -170,6 +176,9 @@
 
 		public function Stop() {
 			$this->Send("stop\n");
+
+			SetValue($this->GetIDForIdent("Titel"),"-");
+			SetValue($this->GetIDForIdent("TimeElapsed"),"-");
 		}
 
 		public function Previous() {
@@ -186,7 +195,7 @@
 
 			$this->Send("clear\n");
 			$this->Send("add ".$StationURL." \n");
-			usleep(250000);  // Kurz warten und dann schliessen
+			usleep(50000);
 
 //			if($this->GetValue("Status")==3) {
 				$this->Send("play\n");
