@@ -132,15 +132,23 @@
 
 		}
 
-		public function SetPower(boolean $Value) {
+		public function SetPower(bool $Value) {
 			$ClientSocketID = $this->GetClientSocketID($this->InstanceID);
 
 			if($Value) {
 				IPS_SetProperty($ClientSocketID,"Open",TRUE);
+
+				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), true);
+				IPS_SetDisabled($this->GetIDForIdent("Status"), true);
+
 			} else {
 				$this->Stop();
-				sleep(1);
+				usleep(250000);
 				IPS_SetProperty($ClientSocketID,"Open",FALSE);
+
+				IPS_SetDisabled($this->GetIDForIdent("Senderliste"), false);
+				IPS_SetDisabled($this->GetIDForIdent("Status"), false);
+
 			}
 			IPS_ApplyChanges($ClientSocketID);
 
@@ -178,7 +186,7 @@
 
 			$this->Send("clear\n");
 			$this->Send("add ".$StationURL." \n");
-			usleep(500000);  // Kurz warten und dann beenden
+			usleep(250000);  // Kurz warten und dann schliessen
 
 //			if($this->GetValue("Status")==3) {
 				$this->Send("play\n");
