@@ -42,8 +42,11 @@
 	    }]
 	},
 	
-	{ "type": "CheckBox", "name": "HideVolume", "caption": "Verstecke Lautstärke" }
+	{ "type": "CheckBox", "name": "HideVolume", "caption": "Verstecke Lautstärke" },
 
+	{ "type": "CheckBox", "name": "HideTitle", "caption": "Verstecke Titel" },
+
+	{ "type": "CheckBox", "name": "HideTimeElapsed", "caption": "Verstecke Spielzeit" }
 
     ]
 }

@@ -14,6 +14,8 @@
             );
 
             $this->RegisterPropertyBoolean("HideVolume",false);
+            $this->RegisterPropertyBoolean("HideTitle",false);
+            $this->RegisterPropertyBoolean("HideTimeElapsed",false);
 
 			$this->RegisterTimer("KeepAliveTimer", 1000, 'MPDP_KeepAlive($_IPS[\'TARGET\']);');
 		}
@@ -33,8 +35,8 @@
 			$this->RegisterVariableString("Titel", "Titel","",3);
 			IPS_SetIcon($this->GetIDForIdent("Titel"), "Melody");
 
-			$this->RegisterVariableString("Dauer","Dauer","",4);
-			IPS_SetIcon($this->GetIDForIdent("Dauer"), "Clock");
+			$this->RegisterVariableString("TimeElapsed","Dauer","",4);
+			IPS_SetIcon($this->GetIDForIdent("TimeElapsed"), "Clock");
 
 			$this->RegisterProfileIntegerEx("Mpd.Status", "Information", "", "", Array( Array(0, " << ", "", -1),
 																					Array(1, " Stop ",   "", -1),
@@ -64,13 +66,30 @@
 			} else {
 				IPS_SetHidden($this->GetIDForIdent("Volume"), FALSE);
 			}
+
+			if($this->ReadPropertyBoolean('HideTitle')) {
+				IPS_SetHidden($this->GetIDForIdent("Titel"), TRUE);
+			} else {
+				IPS_SetHidden($this->GetIDForIdent("Titel"), FALSE);
+			}
+
+			if($this->ReadPropertyBoolean('HideTimeElapsed')) {
+				IPS_SetHidden($this->GetIDForIdent("TimeElapsed"), TRUE);
+			} else {
+				IPS_SetHidden($this->GetIDForIdent("TimeElapsed"), FALSE);
+			}
+
+
 		}
 
 		public function RequestAction($Ident, $Value) {
+
+
 			SetValue($this->GetIDForIdent($Ident), $Value);
 
 			switch($Ident) {
 				case "Power":
+					$this->SetPower($Value);
 					break;
 
 				case "Volume":
@@ -113,6 +132,25 @@
 
 		}
 
+		public function SetPower(boolean $Value) {
+			$ClientSocketID = $this->GetClientSocketID($this->InstanceID);
+
+			if($Value) {
+				IPS_SetProperty($ClientSocketID,"Open",TRUE);
+			} else {
+				$this->Stop();
+				sleep(1);
+				IPS_SetProperty($ClientSocketID,"Open",FALSE);
+			}
+			IPS_ApplyChanges($ClientSocketID);
+
+		}
+
+		private function GetClientSocketID($instance): int {
+			$arInstance = IPS_GetInstance($instance);
+
+			return $arInstance["ConnectionID"];;
+		}
 
 		public function Play() {
 			$this->Send("play\n");
@@ -140,6 +178,7 @@
 
 			$this->Send("clear\n");
 			$this->Send("add ".$StationURL." \n");
+			usleep(500000);  // Kurz warten und dann beenden
 
 //			if($this->GetValue("Status")==3) {
 				$this->Send("play\n");
@@ -171,7 +210,11 @@
 
 		public function Send(string $Text)
 		{
-			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $Text)));
+			if($this->HasActiveParent()) {
+				$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $Text)));
+			} else {
+				IPS_LogMessage("MPDPlayer","Not connected - Unable send command: ". $Text);
+			}
 		}
 
 		public function ReceiveData($JSONString)
@@ -248,7 +291,7 @@
 
 			$niced_elapsed = sprintf("%02d:%02d:%02d", $stunden, $minuten, $sekunden);
 
-			SetValue($this->GetIDForIdent("Dauer"), $niced_elapsed);
+			SetValue($this->GetIDForIdent("TimeElapsed"), $niced_elapsed);
 		}
 
 		public function KeepAlive()
